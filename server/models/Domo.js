@@ -4,43 +4,43 @@ const _ = require('underscore');
 
 let DomoModel = {};
 
-//mongoose.Types.ObjectID is a function that 
+// mongoose.Types.ObjectID is a function that
 // converts string ID to real mongo ID
-const convertID = mongoose.Types.ObjectID;
+const convertId = mongoose.Types.ObjectID;
 const setName = (name) => _.escape(name).trim();
 
 const DomoSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        trim: true,
-        set: setName,
-    },
-    
-    age: {
-        type: Number,
-        min: 0,
-        required: true,
-    },
-    
-    owner: {
-        type: mongoose.Schema.ObjectId,
-        required: true,
-        ref: 'Account',
-    },
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+    set: setName,
+  },
+
+  age: {
+    type: Number,
+    min: 0,
+    required: true,
+  },
+
+  owner: {
+    type: mongoose.Schema.ObjectId,
+    required: true,
+    ref: 'Account',
+  },
 });
 
 DomoSchema.statics.toAPI = (doc) => ({
-    name: doc.name,
-    age: doc.age,
+  name: doc.name,
+  age: doc.age,
 });
 
-DomoSchema.statics.findByOwner = (ownerId, callback) => {
-    const search = {
-        owner: convertId(ownerId),
-    };
-    
-    return DomoModel.find(search).select('name age').exec(callback);
+DomoSchema.statics.findByOwner = (ownerID, callback) => {
+  const search = {
+    owner: convertId(ownerID),
+  };
+
+  return DomoModel.find(search).select('name age').exec(callback);
 };
 
 DomoModel = mongoose.model('Domo', DomoSchema);
